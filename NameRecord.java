@@ -15,9 +15,11 @@ public class NameRecord {
     private final int START = 1900;
     private final int DECADES = 11;
     private String name = "";
+    private int[] ranks = new int[DECADES];
     
     public NameRecord(String name) {
         // code code code
+        this.name = name;
     }
 
     public String getString() {
