@@ -26,6 +26,33 @@ public class NameSurfer {
         scnr.nextLine();
         count++;
       }
+      
+      NameRecord[] names = new NameRecord[count];
+      scnr = new Scanner(file);
+      
+      for (int i = 0; i < count; i++) {
+        
+        NameRecord name = new NameRecord(scnr.nextLine());
+        names[i] = name;
+        
+        // if (i % 1000 == 0) {
+        //  
+        //   System.out.println(names[i]);
+        //  
+        // }
+        
+      }
+      
+      for (int i = 0; i < names.length; i++) {
+        
+       if (names[i].getName().toLowerCase().equals("zulma")) {
+         
+         System.out.println(names[i].getName());
+         
+       }
+        
+      }
+    
     }
     catch (FileNotFoundException e) {
       e.printStackTrace();
