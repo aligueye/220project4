@@ -11,56 +11,108 @@
  *************************************************************************/
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Scanner;
+import java.util.*;
 
 public class NameSurfer {
-    
+  
   public static void main(String[] args) {
     // read all names into array of name records
+    
     File file = new File("name_data.txt");
-    int count = 0;
+    ArrayList<NameRecord> names = new ArrayList<NameRecord>();
+    Scanner scnr; // Scanner object, used to read files and user input
+    int choice = -1; // used to hold user's choices after prompts
+    boolean quit = false; // quit condtion of program
+    String userName = ""; // name user enters into program
+    NameRecord selectedName = null; // reference used for word selected
+    int userDecade = -1; // int of decade user request to see rank from
+    
     try {
-      Scanner scnr = new Scanner(file);
+      scnr = new Scanner(file);
             
       while (scnr.hasNextLine()) {
-        scnr.nextLine();
-        count++;
+        names.add(new NameRecord(scnr.nextLine()));
       }
       
-      NameRecord[] names = new NameRecord[count];
-      scnr = new Scanner(file);
-      
-      for (int i = 0; i < count; i++) {
-        
-        NameRecord name = new NameRecord(scnr.nextLine());
-        names[i] = name;
-        
-        // if (i % 1000 == 0) {
-        //  
-        //   System.out.println(names[i]);
-        //  
-        // }
-        
-      }
-      
-      for (int i = 0; i < names.length; i++) {
-        
-       if (names[i].getName().toLowerCase().equals("zulma")) {
-         
-         System.out.println(names[i].getName());
-         
-       }
-        
-      }
-    
     }
     catch (FileNotFoundException e) {
       e.printStackTrace();
     }
+    
+    System.out.println(names.get(0).getName()+" "+names.get(4428).getName());
+    
+    // loop continues until a plot is cleared or program selects to quit program
+    while (!quit) {
+      System.out.println("1 – Find best year for a name\n" +
+                         "2 – Find best rank for a name\n" +
+                         "3 – Plot popularity of a name\n" +
+                         "4 – Clear plot\n" +
+                         "5 – Quit\n" +
+                         "Enter your selection.\n");
+    
+      scnr = new Scanner(System.in);
+      choice = scnr.nextInt();
+      
+      if (choice < 4 && choice > 0) {
+        System.out.println("Enter a name\n");
+        userName = scnr.next();
+        if (nameFound(names, userName)) { // Returns true if name is in the array
 
-    System.out.println(count);
-    // also shit to 'play' 
-        
+          for (NameRecord name : names) {
+            if (name.getName().equalsIgnoreCase(userName)) {
+              selectedName = name;
+            }
+          }
+
+          switch(choice) {
+            
+            case 1:
+              
+              System.out.println("Best year for this name was " + selectedName.bestYear() + "\n");
+              break;
+            
+            case 2:
+              
+              System.out.println("Enter decade to find rank in\n");
+              userDecade = scnr.nextInt();
+              System.out.println("Rank for decade " + userDecade + " was " + selectedName.getRank(userDecade));
+              break;
+            
+            case 3:
+              
+              System.out.println("Plotting graph\n");
+              // selectedName.plot();
+              break;
+          }
+        }
+        else {
+          System.out.println("Error: name not found\n");
+        }
+      } 
+      else if (choice == 4) {
+        // StdDraw.clear();
+        quit = true;
+      }
+      else { 
+        quit = true;
+      }
+
     }
+    
+  }
+  
+  private static boolean nameFound(ArrayList<NameRecord> names, String userName) { 
+    
+    for (NameRecord name : names) {
+
+      if (name.getName().equalsIgnoreCase(userName)) {
+        return true;
+      }
+
+    }
+
+    return false;
+
+  }
 
 }
