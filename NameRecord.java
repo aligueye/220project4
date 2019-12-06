@@ -4,9 +4,7 @@
  CSC 220-02
  
  
- Description:
- 
- Capabilities:
+ Description: encapsulates the data for one name, the name and its rank over the years
 
  *************************************************************************/
 
@@ -19,6 +17,7 @@ public class NameRecord {
   private String name = ""; // the baby name
   private int[] ranks = new int[DECADES]; // the rank of the name in each decade (a rank of 0 means it was not popular enough to recieve a rank)
   
+  // constructor
   public NameRecord(String line) {
     
     Scanner scnr = new Scanner(line);
@@ -30,33 +29,56 @@ public class NameRecord {
       
     }
     
-  }
+  } // closes constructor
 
+  // returns the name stored in the object
   public String getName() {
 
     return name;
 
-  }
+  } // closes getName method
 
+  // returns the rank of a name in the provided decade
   public int getRank(int decade) {
 
     return ranks[decade];
 
-  }
+  } // closes getRank method
 
+  // returns the year in which the name was most popular
   public int bestYear() {
 
-    // return year of index with most pop name
-    return 1;
+    int bestRank = 1100; // it is safe to assume every rank will be less than 1100
+    int bestYear = 0; // will store the value that will eventually be output
+    for (int i = 0; i < ranks.length; i++) {
 
-  }
+      if (ranks[i] < bestRank && ranks[i] > 0) {
+        
+        bestRank = ranks[i];
+        bestYear = START + (i * 10);
+        
+      }
+    
+    }
+    
+    return bestYear;
 
+  } // closes bestYear method
+
+  // plots the name's rank over the years as a line graph
   public void plot() {
 
-    // draw shit
+    chooseColor();
+    
+    for (int i = 0; i < ranks.length - 1; i++) {
       
-  }
+      StdDraw.line(((double) i / ranks.length), ((double) (1100 + ranks[i]) / 1100 - 1.0), ((double) (i + 1) / ranks.length), ((double) (1100 + ranks[i + 1]) / 1100 - 1.0));
+      
+    }
+      
+  } // closes plot method
   
+  // overrides the toString method. Although unused by the user, it was utilized during development
   public String toString() {
     
     String output = "Name: " + name;
@@ -68,6 +90,82 @@ public class NameRecord {
     
     return output;
     
-  }
+  } // closes toString method
+
+  // returns the best rank of a name
+  public int bestRank() {
+    
+    int bestRank = 1100; // it is safe to assume every rank will be less than 1100
+    
+    for (int i = 0; i < ranks.length; i++) {
+      
+      if (ranks[i] < bestRank && ranks[i] > 0) {
+        
+        bestRank = ranks[i];
+        
+      }
+      
+    }
+    
+    return bestRank;
+    
+  } // closes bestRank method
+
+  // helper method that randomly selects a pen color for the plot method
+  private static void chooseColor() {
+    
+    int rand = (int) Math.floor(Math.random() * 10);
+
+    if (rand == 0) {
+      
+      StdDraw.setPenColor(StdDraw.BLACK);
+      
+    } else if (rand == 1) {
+      
+      StdDraw.setPenColor(StdDraw.BLUE);
+      
+    } else if (rand == 2) {
+      
+      StdDraw.setPenColor(StdDraw.CYAN);
+      
+    } else if (rand == 3) {
+      
+      StdDraw.setPenColor(StdDraw.DARK_GRAY);
+      
+    } else if (rand == 4) {
+      
+      StdDraw.setPenColor(StdDraw.GRAY);
+      
+    } else if (rand == 5) {
+      
+      StdDraw.setPenColor(StdDraw.GREEN);
+      
+    } else if (rand == 6) {
+      
+      StdDraw.setPenColor(StdDraw.LIGHT_GRAY);
+      
+    } else if (rand == 7) {
+      
+      StdDraw.setPenColor(StdDraw.MAGENTA);
+      
+    } else if (rand == 8) {
+      
+      StdDraw.setPenColor(StdDraw.ORANGE);
+      
+    } else if (rand == 9) {
+      
+      StdDraw.setPenColor(StdDraw.PINK);
+      
+    } else if (rand == 10) {
+      
+      StdDraw.setPenColor(StdDraw.RED);
+      
+    } else if (rand == 0) {
+      
+      StdDraw.setPenColor(StdDraw.YELLOW);
+      
+    }
+    
+  } // closes chooseColor method
 
 }
