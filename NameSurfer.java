@@ -4,9 +4,7 @@
  CSC 220-02
  
  
- Description: Driver Class
- 
- Capabilities:
+ Description: Driver Class for the NameRecord object class
 
  *************************************************************************/
 import java.io.File;
@@ -16,9 +14,10 @@ import java.util.*;
 public class NameSurfer {
   
   public static void main(String[] args) {
-
-    File file = new File("name_data.txt"); // Allows us to pass name data into scanner input stream
-    ArrayList<NameRecord> names = new ArrayList<NameRecord>(); // array list of NameRecord objects, used for iterations
+    // read all names into array of name records
+    
+    File file = new File("name_data.txt");
+    ArrayList<NameRecord> names = new ArrayList<NameRecord>();
     Scanner scnr; // Scanner object, used to read files and user input
     int choice = -1; // used to hold user's choices after prompts
     boolean quit = false; // quit condtion of program
@@ -27,103 +26,112 @@ public class NameSurfer {
     int userDecade = -1; // int of decade user request to see rank from
     
     try {
+
       scnr = new Scanner(file);
             
       while (scnr.hasNextLine()) {
+
         names.add(new NameRecord(scnr.nextLine()));
+
       }
       
-    }
-    catch (FileNotFoundException e) {
-      e.printStackTrace();
-    }
-    
-    System.out.println(names.get(0).getName()+" "+names.get(4428).getName());
-    
-    // Assigns scnanner to user input instead of names file 
-    scnr = new Scanner(System.in);
+    } catch (FileNotFoundException e) {
 
+      e.printStackTrace();
+
+    }
+    
+    // System.out.println(names.get(0).getName()+" "+names.get(4428).getName());
+    
     // loop continues until a plot is cleared or program selects to quit program
     while (!quit) {
+
       System.out.println("1 – Find best year for a name\n" +
-                         "2 – Find given rank for a name\n" +
+                         "2 – Find best rank for a name\n" +
                          "3 – Plot popularity of a name\n" +
                          "4 – Clear plot\n" +
                          "5 – Quit\n" +
                          "Enter your selection.\n");
     
+      scnr = new Scanner(System.in);
       choice = scnr.nextInt();
       
       if (choice < 4 && choice > 0) {
-        
-        System.out.println("\nEnter a name\n");
-        userName = scnr.next();
 
-        if (nameFound(names, userName)) {
-          
-          // If name is found, assigns given name the selectedName reference
+        System.out.println("Enter a name\n");
+        userName = scnr.next();
+        if (nameFound(names, userName)) { // Returns true if name is in the array
+
           for (NameRecord name : names) {
+
             if (name.getName().equalsIgnoreCase(userName)) {
+
               selectedName = name;
+
             }
+
           }
 
           switch(choice) {
             
-            case 1:
+            case 1: // find the best year for a name
               
-              System.out.println("\nBest year for this name was " + selectedName.bestYear() + "\n");
+              System.out.println("Best year for this name was " + selectedName.bestYear() + "\n");
               break;
             
-            case 2:
+            case 2: // find the best rank for a name
               
-              System.out.println("\nEnter decade to find rank in\n");
-              userDecade = scnr.nextInt();
-              
-              // Checks if user enters valid decade
-              while (userDecade < 0 || userDecade > 10) {
-                System.out.println("\nEnter valid decade between: 0-10\n");
-                userDecade = scnr.nextInt();
-              }
-
-              System.out.println("\nRank for decade " + (1900 + (userDecade * 10)) + " was " + selectedName.getRank(userDecade) + "\n");
+              System.out.println("Best rank for this name was " + selectedName.bestRank() + "\n");
               break;
             
             case 3:
               
-              System.out.println("\nPlotting graph...\n");
+              System.out.println("Plotting graph\n");
               selectedName.plot();
               break;
+
           }
+
+        } else {
+
+          System.out.println("Error: name not found\n");
+
         }
-        else {
-          System.out.println("\nError: name not found\n");
-        }
-      } 
-      else if (choice == 4) {
+
+      } else if (choice == 4) {
+
         StdDraw.clear();
-      }
-      else {
         quit = true;
+
+      } else if (choice == 5) { 
+
+        quit = true;
+
+      } else {
+        
+        System.out.println("Invalid option");
+        
       }
 
-    }
+    } // closes while loop
     
-  }
+  } // closes main method
   
-  // Checks if user entered name is a part of the names data
+  // helper method to quickly return true if the name entered by the user exists in the data
   private static boolean nameFound(ArrayList<NameRecord> names, String userName) { 
     
     for (NameRecord name : names) {
 
       if (name.getName().equalsIgnoreCase(userName)) {
+
         return true;
+
       }
 
     }
 
     return false;
 
-  }
+  } // closes nameFound method
 
-}
+} // closes NameSurfer class
