@@ -16,10 +16,9 @@ import java.util.*;
 public class NameSurfer {
   
   public static void main(String[] args) {
-    // read all names into array of name records
-    
-    File file = new File("name_data.txt");
-    ArrayList<NameRecord> names = new ArrayList<NameRecord>();
+
+    File file = new File("name_data.txt"); // Allows us to pass name data into scanner input stream
+    ArrayList<NameRecord> names = new ArrayList<NameRecord>(); // array list of NameRecord objects, used for iterations
     Scanner scnr; // Scanner object, used to read files and user input
     int choice = -1; // used to hold user's choices after prompts
     boolean quit = false; // quit condtion of program
@@ -41,23 +40,28 @@ public class NameSurfer {
     
     System.out.println(names.get(0).getName()+" "+names.get(4428).getName());
     
+    // Assigns scnanner to user input instead of names file 
+    scnr = new Scanner(System.in);
+
     // loop continues until a plot is cleared or program selects to quit program
     while (!quit) {
       System.out.println("1 – Find best year for a name\n" +
-                         "2 – Find best rank for a name\n" +
+                         "2 – Find given rank for a name\n" +
                          "3 – Plot popularity of a name\n" +
                          "4 – Clear plot\n" +
                          "5 – Quit\n" +
                          "Enter your selection.\n");
     
-      scnr = new Scanner(System.in);
       choice = scnr.nextInt();
       
       if (choice < 4 && choice > 0) {
-        System.out.println("Enter a name\n");
+        
+        System.out.println("\nEnter a name\n");
         userName = scnr.next();
-        if (nameFound(names, userName)) { // Returns true if name is in the array
 
+        if (nameFound(names, userName)) {
+          
+          // If name is found, assigns given name the selectedName reference
           for (NameRecord name : names) {
             if (name.getName().equalsIgnoreCase(userName)) {
               selectedName = name;
@@ -68,32 +72,38 @@ public class NameSurfer {
             
             case 1:
               
-              System.out.println("Best year for this name was " + selectedName.bestYear() + "\n");
+              System.out.println("\nBest year for this name was " + selectedName.bestYear() + "\n");
               break;
             
             case 2:
               
-              System.out.println("Enter decade to find rank in\n");
+              System.out.println("\nEnter decade to find rank in\n");
               userDecade = scnr.nextInt();
-              System.out.println("Rank for decade " + userDecade + " was " + selectedName.getRank(userDecade));
+              
+              // Checks if user enters valid decade
+              while (userDecade < 0 || userDecade > 10) {
+                System.out.println("\nEnter valid decade between: 0-10\n");
+                userDecade = scnr.nextInt();
+              }
+
+              System.out.println("\nRank for decade " + (1900 + (userDecade * 10)) + " was " + selectedName.getRank(userDecade) + "\n");
               break;
             
             case 3:
               
-              System.out.println("Plotting graph\n");
-              // selectedName.plot();
+              System.out.println("\nPlotting graph...\n");
+              selectedName.plot();
               break;
           }
         }
         else {
-          System.out.println("Error: name not found\n");
+          System.out.println("\nError: name not found\n");
         }
       } 
       else if (choice == 4) {
-        // StdDraw.clear();
-        quit = true;
+        StdDraw.clear();
       }
-      else { 
+      else {
         quit = true;
       }
 
@@ -101,6 +111,7 @@ public class NameSurfer {
     
   }
   
+  // Checks if user entered name is a part of the names data
   private static boolean nameFound(ArrayList<NameRecord> names, String userName) { 
     
     for (NameRecord name : names) {
