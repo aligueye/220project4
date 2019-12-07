@@ -71,8 +71,26 @@ public class NameRecord {
     chooseColor();
     
     for (int i = 0; i < ranks.length - 1; i++) {
+    
+      double x1 = (double) i / ranks.length;
+      double y1 = (double) (1100 - ranks[i]) / 1100;
+      double x2 = (double) (i + 1) / ranks.length;
+      double y2 = (double) (1100 - ranks[i + 1]) / 1100;
+  
+      // puts unranked names in the correct position
+      if (ranks[i] == 0) {
+        
+        y1 = 0.0;
+        
+      }
+    
+      if (ranks[i + 1] == 0) {
+        
+        y2 = 0.0;
+        
+      }
       
-      StdDraw.line(((double) i / ranks.length), ((double) (1100 + ranks[i]) / 1100 - 1.0), ((double) (i + 1) / ranks.length), ((double) (1100 + ranks[i + 1]) / 1100 - 1.0));
+      StdDraw.line(x1, y1, x2, y2);
       
     }
       
